@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import web.member.service.MemberService;
@@ -32,13 +33,10 @@ public class LoginServlet extends HttpServlet {
 			MemberService service = new MemberServiceImpl();
 			member = service.login(member.getMemID(), member.getMemPassword());
 			if (member != null) {
-//				System.out.println("登入成功");
-//				System.out.println(member.getMemLastName());
-//				System.out.println(member.getMemFirstName());
 				respObject.addProperty("msg", "success");
-				respObject.addProperty("userName", member.getMemLastName() + member.getMemFirstName());
+				// Referenced from https://stackoverflow.com/questions/22585970/how-to-add-an-object-as-a-property-of-a-jsonobject-object
+				respObject.add("member", new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJsonTree(member));
 			} else {
-//				System.out.println("登入失敗");
 				respObject.addProperty("msg", "fail");
 			}
 		} catch (NamingException e) {

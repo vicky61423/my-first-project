@@ -16,6 +16,11 @@ public class Member implements Serializable {
 	private String memPhone;
 	private String memAddress;
 
+	@Override
+	public String toString() {
+		return "Member [memID=" + memID + ", memFirstName=" + memFirstName + ", memLastName=" + memLastName + "]";
+	}
+
 	public Member() {
 
 	}

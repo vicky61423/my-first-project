@@ -33,12 +33,8 @@ public class RegisterServlet extends HttpServlet {
 			MemberService service = new MemberServiceImpl();
 			Integer status = service.register(member);
 			if (status > 0) {
-//				System.out.println("登入成功");
-//				System.out.println(member.getMemLastName());
-//				System.out.println(member.getMemFirstName());
 				respObject.addProperty("msg", "success");
 			} else {
-//				System.out.println("登入失敗");
 				respObject.addProperty("msg", "fail");
 			}
 		} catch (NamingException e) {

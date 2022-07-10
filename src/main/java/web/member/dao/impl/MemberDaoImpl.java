@@ -42,20 +42,25 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return -1;
 	}
-
+	
 	@Override
 	public Member selectByMemberIdAndPassword(Member member) {
 		try (Connection conn = datasource.getConnection();
 				PreparedStatement pstmt = conn
-						.prepareStatement("Select FIRSTNAME, LASTNAME from MEMBER where MEMID = ? and PASSWORD = ?");) {
+						.prepareStatement("Select MEMID, FIRSTNAME, LASTNAME, EMAIL, BIRTH, CELLPHONE, ADDR from MEMBER where MEMID = ? and PASSWORD = ?");) {
 			pstmt.setString(1, member.getMemID());
 			pstmt.setString(2, member.getMemPassword());
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 					System.out.println("存取成功");
 					Member resultMember = new Member();
-					resultMember.setMemLastName(rs.getString("LASTNAME"));
+					resultMember.setMemID(rs.getString("MEMID"));
 					resultMember.setMemFirstName(rs.getString("FIRSTNAME"));
+					resultMember.setMemLastName(rs.getString("LASTNAME"));
+					resultMember.setMemEmail(rs.getString("EMAIL"));
+					resultMember.setMemBirth(rs.getDate("BIRTH"));
+					resultMember.setMemCellPhone(rs.getString("CELLPHONE"));
+					resultMember.setMemAddress(rs.getString("ADDR"));
 					return resultMember;
 				}
 			}
