@@ -43,11 +43,12 @@ public class MemberDaoImpl implements MemberDao {
 		return -1;
 	}
 	
+	final String SELECT = "Select MEMID, FIRSTNAME, LASTNAME, EMAIL, BIRTH, CELLPHONE, ADDR from MEMBER where MEMID = ? and PASSWORD = ?";
 	@Override
 	public Member selectByMemberIdAndPassword(Member member) {
 		try (Connection conn = datasource.getConnection();
 				PreparedStatement pstmt = conn
-						.prepareStatement("Select MEMID, FIRSTNAME, LASTNAME, EMAIL, BIRTH, CELLPHONE, ADDR from MEMBER where MEMID = ? and PASSWORD = ?");) {
+						.prepareStatement(SELECT);) {
 			pstmt.setString(1, member.getMemID());
 			pstmt.setString(2, member.getMemPassword());
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -70,10 +71,27 @@ public class MemberDaoImpl implements MemberDao {
 		return null;
 	}
 
+	final String UPDATE = "update MEMBER set EMAIL = ?, FIRSTNAME = ?, LASTNAME = ?, BIRTH = ?, CELLPHONE = ?, ADDR = ? where MEMID = ?;";
 	@Override
-	public Member update(Member member) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer update(Member member) {
+		System.out.println("Update start");
+		try (Connection conn = datasource.getConnection();
+				PreparedStatement pstmt = conn
+						.prepareStatement(UPDATE);){
+			pstmt.setString(1, member.getMemEmail());
+			pstmt.setString(2, member.getMemFirstName());
+			pstmt.setString(3, member.getMemLastName());
+			pstmt.setDate(4, member.getMemBirth());
+			pstmt.setString(5, member.getMemCellPhone());
+			pstmt.setString(6, member.getMemAddress());
+			pstmt.setString(7, member.getMemID());
+			int rowCount = pstmt.executeUpdate();
+			System.out.println(rowCount + " row(s) updated!!");
+			return rowCount;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 
 	@Override

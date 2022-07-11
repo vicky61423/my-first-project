@@ -29,6 +29,7 @@ public class LoginServlet extends HttpServlet {
 		JsonObject respObject = new JsonObject();
 
 		Member member = gson.fromJson(request.getReader(), Member.class);
+		System.out.println(member);
 		try {
 			MemberService service = new MemberServiceImpl();
 			member = service.login(member.getMemID(), member.getMemPassword());

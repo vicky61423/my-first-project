@@ -9,12 +9,21 @@ import web.member.dao.impl.MemberDaoImpl;
 import web.member.service.MemberService;
 import web.member.vo.Member;
 
-
 public class MemberServiceImpl implements MemberService {
 	private MemberDao dao;
-	
+
 	public MemberServiceImpl() throws NamingException {
 		dao = new MemberDaoImpl();
+	}
+
+	@Override
+	public Integer modify(Member member) {
+		// 1. check if there is any null column in the not-null column
+		if (!checkValue(member.getMemID())) {
+			System.out.println("帳號錯誤");
+			return null;
+		}
+		return dao.update(member);
 	}
 
 	@Override
@@ -36,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
 		Integer status = dao.insert(member);
 		return status;
 	}
-	
+
 	private boolean checkValue(String value) {
 		if (value == null || Objects.equals(value, "")) {
 			System.out.println(value);
