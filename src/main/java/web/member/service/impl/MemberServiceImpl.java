@@ -17,6 +17,15 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public Integer remove(Member member) {
+		if (!checkValue(member.getMemID())) {
+			System.out.println("帳號錯誤");
+			return -1;
+		}
+		return dao.delete(member);
+	}
+
+	@Override
 	public Integer modify(Member member) {
 		// 1. check if there is any null column in the not-null column
 		if (!checkValue(member.getMemID())) {

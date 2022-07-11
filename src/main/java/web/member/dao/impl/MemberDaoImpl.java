@@ -74,7 +74,6 @@ public class MemberDaoImpl implements MemberDao {
 	final String UPDATE = "update MEMBER set EMAIL = ?, FIRSTNAME = ?, LASTNAME = ?, BIRTH = ?, CELLPHONE = ?, ADDR = ? where MEMID = ?;";
 	@Override
 	public Integer update(Member member) {
-		System.out.println("Update start");
 		try (Connection conn = datasource.getConnection();
 				PreparedStatement pstmt = conn
 						.prepareStatement(UPDATE);){
@@ -94,9 +93,18 @@ public class MemberDaoImpl implements MemberDao {
 		return -1;
 	}
 
+	final String DELETE = "delete from MEMBER where MEMID = ?;";
 	@Override
 	public Integer delete(Member member) {
-		// TODO Auto-generated method stub
+		try (Connection conn = datasource.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(DELETE);) {
+			pstmt.setString(1, member.getMemID());
+			int rowCount = pstmt.executeUpdate();
+			System.out.println(rowCount + " row(s) deleted!!");
+			return rowCount;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 
