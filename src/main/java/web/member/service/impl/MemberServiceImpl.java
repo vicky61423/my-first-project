@@ -36,15 +36,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member login(String account, String password) {
+	public Member login(Member member) {
+		String account = member.getMemID();
+		String password = member.getMemPassword();
 //		System.out.println(account + " " + password);
 		if (!checkValue(account) || !checkValue(password)) {
 			System.out.println("帳號或密碼錯誤");
 			return null;
 		}
-		Member member = new Member();
-		member.setMemID(account);
-		member.setMemPassword(password);
 		member = dao.selectByMemberIdAndPassword(member);
 		return member;
 	}

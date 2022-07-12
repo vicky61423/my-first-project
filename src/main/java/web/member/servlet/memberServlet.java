@@ -20,46 +20,17 @@ import web.member.vo.Member;
 @WebServlet("/api/0.01/member/*")
 public class memberServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setCharacterEncoding("UTF-8");
-//		setHeaders(resp);
-		String pathInfo = req.getPathInfo();
-		String[] infos = pathInfo.split("/");
-
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-		JsonObject respObject = new JsonObject();
-		Member member = gson.fromJson(req.getReader(), Member.class);
-
-		if ("login".equals(infos[1])) {
-			try {
-				MemberService service = new MemberServiceImpl();
-				member = service.login(member.getMemID(), member.getMemPassword());
-				if (member != null) {
-					respObject.addProperty("msg", "success");
-					// Referenced from
-					// https://stackoverflow.com/questions/22585970/how-to-add-an-object-as-a-property-of-a-jsonobject-object
-					respObject.add("member", new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJsonTree(member));
-				} else {
-					respObject.addProperty("msg", "fail");
-				}
-			} catch (NamingException e) {
-				e.printStackTrace();
-			}
-			System.out.println(gson.toJson(respObject));
-			resp.getWriter().append(gson.toJson(respObject));
-		}
-	}
+	private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+	private String pathInfo;
+	private String[] infos;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-//		setHeaders(resp);
-		String pathInfo = req.getPathInfo();
-		String[] infos = pathInfo.split("/");
+		setHeaders(resp);
+		pathInfo = req.getPathInfo();
+		infos = pathInfo.split("/");
 
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 		JsonObject respObject = new JsonObject();
 		Member member = gson.fromJson(req.getReader(), Member.class);
 
@@ -77,6 +48,23 @@ public class memberServlet extends HttpServlet {
 			}
 			System.out.println(gson.toJson(respObject));
 			resp.getWriter().append(gson.toJson(respObject));
+		} else if ("login".equals(infos[1])) {
+			try {
+				MemberService service = new MemberServiceImpl();
+				member = service.login(member);
+				if (member != null) {
+					respObject.addProperty("msg", "success");
+					// Referenced from
+					// https://stackoverflow.com/questions/22585970/how-to-add-an-object-as-a-property-of-a-jsonobject-object
+					respObject.add("member", new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJsonTree(member));
+				} else {
+					respObject.addProperty("msg", "fail");
+				}
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}
+			System.out.println(gson.toJson(respObject));
+			resp.getWriter().append(gson.toJson(respObject));
 		}
 
 	}
@@ -84,11 +72,11 @@ public class memberServlet extends HttpServlet {
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-		Gson gson = new Gson();
+		setHeaders(resp);
+		pathInfo = req.getPathInfo();
+		infos = pathInfo.split("/");
 		JsonObject respObject = new JsonObject();
 		Member member = gson.fromJson(req.getReader(), Member.class);
-		String pathInfo = req.getPathInfo();
-		String[] infos = pathInfo.split("/");
 		if ("login".equals(infos[1])) {
 			try {
 				MemberService service = new MemberServiceImpl();
@@ -108,11 +96,11 @@ public class memberServlet extends HttpServlet {
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-		Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+		setHeaders(resp);
+		pathInfo = req.getPathInfo();
+		infos = pathInfo.split("/");
 		JsonObject respObject = new JsonObject();
 		Member member = gson.fromJson(req.getReader(), Member.class);
-		String pathInfo = req.getPathInfo();
-		String[] infos = pathInfo.split("/");
 		if ("modify".equals(infos[1])) {
 			try {
 				MemberService service = new MemberServiceImpl();
@@ -127,5 +115,26 @@ public class memberServlet extends HttpServlet {
 			System.out.println(gson.toJson(respObject));
 			resp.getWriter().append(gson.toJson(respObject));
 		}
+	}
+	/*
+	 * 誇域
+	 */
+	@Override
+	protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		setHeaders(resp);
+	}
+	
+	private void setHeaders(HttpServletResponse response) {
+		// 重要
+		response.setContentType("application/json;charset=UTF-8");
+		response.setHeader("Cache-control", "no-cache, no-store");
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Expires", "-1");
+
+		// 重要
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Methods", "*");
+		response.addHeader("Access-Control-Allow-Headers", "*");
+		response.addHeader("Access-Control-Max-Age", "86400");
 	}
 }
