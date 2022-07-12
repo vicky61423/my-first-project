@@ -13,7 +13,6 @@ public class Member implements Serializable {
 	private String memLastName;
 	private Date memBirth;
 	private String memCellPhone;
-	private String memPhone;
 	private String memAddress;
 
 	@Override
@@ -79,14 +78,6 @@ public class Member implements Serializable {
 
 	public void setMemCellPhone(String memCellPhone) {
 		this.memCellPhone = memCellPhone;
-	}
-
-	public String getMemPhone() {
-		return memPhone;
-	}
-
-	public void setMemPhone(String memPhone) {
-		this.memPhone = memPhone;
 	}
 
 	public String getMemAddress() {

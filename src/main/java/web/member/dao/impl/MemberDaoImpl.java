@@ -23,8 +23,8 @@ public class MemberDaoImpl implements MemberDao {
 	public Integer insert(Member member) {
 		try (Connection conn = datasource.getConnection();
 				PreparedStatement ps = conn.prepareStatement(
-						"insert into MEMBER (MEMID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, BIRTH, CELLPHONE, PHONE, ADDR)"
-								+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?);");) {
+						"insert into MEMBER (MEMID, EMAIL, PASSWORD, FIRSTNAME, LASTNAME, BIRTH, CELLPHONE, ADDR)"
+								+ "values (?, ?, ?, ?, ?, ?, ?, ?);");) {
 			ps.setString(1, member.getMemID());
 			ps.setString(2, member.getMemEmail());
 			ps.setString(3, member.getMemPassword());
@@ -32,8 +32,7 @@ public class MemberDaoImpl implements MemberDao {
 			ps.setString(5, member.getMemLastName());
 			ps.setDate(6, member.getMemBirth());
 			ps.setString(7, member.getMemCellPhone());
-			ps.setString(8, member.getMemPhone());
-			ps.setString(9, member.getMemAddress());
+			ps.setString(8, member.getMemAddress());
 			int rowCount = ps.executeUpdate();
 			System.out.println("insert " + rowCount + "member.");
 			return rowCount;
