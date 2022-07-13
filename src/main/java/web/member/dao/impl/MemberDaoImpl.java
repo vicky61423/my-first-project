@@ -3,6 +3,8 @@ package web.member.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -17,6 +19,34 @@ public class MemberDaoImpl implements MemberDao {
 
 	public MemberDaoImpl() throws NamingException {
 		datasource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/Yokult");
+	}
+	
+	final String SELECTALL = "Select MEMID, FIRSTNAME, LASTNAME, EMAIL, BIRTH, CELLPHONE, ADDR from MEMBER";
+	@Override
+	public Set<Member> selectAll() {
+		try(Connection conn = datasource.getConnection();
+				PreparedStatement ps = conn.prepareStatement(SELECTALL);) {
+			try (ResultSet rs = ps.executeQuery()) {
+				Set<Member> members = new HashSet<Member>();
+				System.out.println("Show member list:");
+				while(rs.next()) {
+					Member m = new Member();
+					m.setMemID(rs.getString("MEMID"));
+					m.setMemFirstName(rs.getString("FIRSTNAME"));
+					m.setMemLastName(rs.getString("LASTNAME"));
+					m.setMemEmail(rs.getString("EMAIL"));
+					m.setMemBirth(rs.getDate("BIRTH"));
+					m.setMemCellPhone(rs.getString("CELLPHONE"));
+					m.setMemAddress(rs.getString("ADDR"));
+					members.add(m);
+					System.out.println(m);
+				}
+				return members;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

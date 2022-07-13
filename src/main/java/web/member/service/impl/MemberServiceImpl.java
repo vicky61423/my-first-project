@@ -1,6 +1,7 @@
 package web.member.service.impl;
 
 import java.util.Objects;
+import java.util.Set;
 
 import javax.naming.NamingException;
 
@@ -14,6 +15,11 @@ public class MemberServiceImpl implements MemberService {
 
 	public MemberServiceImpl() throws NamingException {
 		dao = new MemberDaoImpl();
+	}
+	
+	@Override
+	public Set<Member> getAll() {
+		return dao.selectAll();
 	}
 
 	@Override

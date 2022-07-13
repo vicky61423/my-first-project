@@ -133,6 +133,29 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "SelectAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/my-first-project/api/0.01/member/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"my-first-project",
+						"api",
+						"0.01",
+						"member",
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -1,6 +1,7 @@
 package web.member.servlet;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
@@ -24,6 +25,24 @@ public class memberServlet extends HttpServlet {
 	private String pathInfo;
 	private String[] infos;
 	private MemberService service;
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
+		setHeaders(resp);
+		JsonObject respObject = new JsonObject();
+		try {
+			service = new MemberServiceImpl();
+			Set<Member> members = service.getAll();
+			if (members != null) {
+				respObject.addProperty("msg", "success");
+				respObject.add("members", gson.toJsonTree(members));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		resp.getWriter().append(gson.toJson(respObject));
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
