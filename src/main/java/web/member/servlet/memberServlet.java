@@ -23,34 +23,27 @@ public class memberServlet extends HttpServlet {
 	private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 	private String pathInfo;
 	private String[] infos;
+	private MemberService service;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
 		setHeaders(resp);
-		pathInfo = req.getPathInfo();
-		infos = pathInfo.split("/");
 
 		JsonObject respObject = new JsonObject();
 		Member member = gson.fromJson(req.getReader(), Member.class);
-
-		if ("register".equals(infos[1])) {
-			try {
-				MemberService service = new MemberServiceImpl();
+		try {
+			service = new MemberServiceImpl();
+			pathInfo = req.getPathInfo();
+			infos = pathInfo.split("/");
+			if ("register".equals(infos[1])) {
 				Integer status = service.register(member);
 				if (status > 0) {
 					respObject.addProperty("msg", "success");
 				} else {
 					respObject.addProperty("msg", "fail");
 				}
-			} catch (NamingException e) {
-				e.printStackTrace();
-			}
-			System.out.println(gson.toJson(respObject));
-			resp.getWriter().append(gson.toJson(respObject));
-		} else if ("login".equals(infos[1])) {
-			try {
-				MemberService service = new MemberServiceImpl();
+			} else if ("login".equals(infos[1])) {
 				member = service.login(member);
 				if (member != null) {
 					respObject.addProperty("msg", "success");
@@ -60,12 +53,11 @@ public class memberServlet extends HttpServlet {
 				} else {
 					respObject.addProperty("msg", "fail");
 				}
-			} catch (NamingException e) {
-				e.printStackTrace();
 			}
-			System.out.println(gson.toJson(respObject));
-			resp.getWriter().append(gson.toJson(respObject));
+		} catch (NamingException e) {
+			e.printStackTrace();
 		}
+		resp.getWriter().append(gson.toJson(respObject));
 
 	}
 
@@ -77,7 +69,7 @@ public class memberServlet extends HttpServlet {
 		infos = pathInfo.split("/");
 		JsonObject respObject = new JsonObject();
 		Member member = gson.fromJson(req.getReader(), Member.class);
-		if ("login".equals(infos[1])) {
+		if ("remove".equals(infos[1])) {
 			try {
 				MemberService service = new MemberServiceImpl();
 				Integer status = service.remove(member);
@@ -116,6 +108,7 @@ public class memberServlet extends HttpServlet {
 			resp.getWriter().append(gson.toJson(respObject));
 		}
 	}
+
 	/*
 	 * 誇域
 	 */
@@ -123,7 +116,7 @@ public class memberServlet extends HttpServlet {
 	protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		setHeaders(resp);
 	}
-	
+
 	private void setHeaders(HttpServletResponse response) {
 		// 重要
 		response.setContentType("application/json;charset=UTF-8");
