@@ -42,6 +42,7 @@ public class memberServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		resp.getWriter().append(gson.toJson(respObject));
+		System.out.println("一人做事一人當 小丁做事小叮噹");
 	}
 
 	@Override
