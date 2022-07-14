@@ -42,6 +42,7 @@ public class memberServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		resp.getWriter().append(gson.toJson(respObject));
+		System.out.println("一人做事一人當 大丁做事小叮噹");
 	}
 
 	@Override
@@ -71,6 +72,7 @@ public class memberServlet extends HttpServlet {
 					respObject.add("member", new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJsonTree(member));
 				} else {
 					respObject.addProperty("msg", "fail");
+					System.out.println("藍莓汁吉22222");
 				}
 			}
 		} catch (NamingException e) {
