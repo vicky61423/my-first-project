@@ -72,6 +72,7 @@ public class memberServlet extends HttpServlet {
 					respObject.add("member", new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJsonTree(member));
 				} else {
 					respObject.addProperty("msg", "fail");
+					System.out.println("藍莓汁吉");
 				}
 			}
 		} catch (NamingException e) {
