@@ -1,11 +1,16 @@
 package web.member.vo;
 
-import java.io.Serializable;
 import java.sql.Date;
 
-public class Member implements Serializable {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-	private static final long serialVersionUID = 1L;
+@Entity
+@Table(name = "MEMBER")
+public class Member {
+
+	@Id
 	private String memID;
 	private String memPassword;
 	private String memEmail;
@@ -13,8 +18,12 @@ public class Member implements Serializable {
 	private String memLastName;
 	private Date memBirth;
 	private String memCellPhone;
-	private String memPhone;
 	private String memAddress;
+
+	@Override
+	public String toString() {
+		return "Member [memID=" + memID + ", memFirstName=" + memFirstName + ", memLastName=" + memLastName + "]";
+	}
 
 	public Member() {
 
@@ -74,14 +83,6 @@ public class Member implements Serializable {
 
 	public void setMemCellPhone(String memCellPhone) {
 		this.memCellPhone = memCellPhone;
-	}
-
-	public String getMemPhone() {
-		return memPhone;
-	}
-
-	public void setMemPhone(String memPhone) {
-		this.memPhone = memPhone;
 	}
 
 	public String getMemAddress() {
